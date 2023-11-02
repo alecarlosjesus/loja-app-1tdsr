@@ -13,23 +13,29 @@ export async function GET(){
 
 }
 
+
+const handleLogin = async (email,senha) => {
+    const body = await JSON.parse(file);
+
+    //Sistema de validação de login, retornando um usuário válido, ou undefined caso não encontre.    
+    const usuarioValidado = body.usuarios.find((user) => user.email == email && user.senha == senha);
+
+    return usuarioValidado;
+}
+
+
 export async function POST(request,response){
 
     //RECEBENDO OS DADOS ENVIADOS NA REQUISIÇÃO!
-    const usuario = await request.json();
+    const {email,senha} = await request.json();
 
-    const body = await JSON.parse(file);
+    //VALIDANDO O LOGIN
+    const uv = await handleLogin(email,senha);
 
-    for (let x = 0; x < body.usuarios.length; x++) {
-        const u = body.usuarios[x];
-
-        if(u.email == usuario.email && u.senha == usuario.senha){
-            //RETORNO DA REQUISIÇÃO!
-            return NextResponse.json({"status":"ok"});
-        }
-        
+    //CASO O USUÁRIO SEJA VÁLIDO, RETORNA TRUE, CASO CONTRÁRIO, RETORNA FALSE.
+    if(uv){
+        return NextResponse.json({"status":true});
     }
 
-    return NextResponse.json({"status":"error"});
-
+    return NextResponse.json({"status":false});
 }
