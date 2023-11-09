@@ -23,7 +23,7 @@ export default function LoginUsers() {
             //ATUALIZANDO O ESTADO DO USUÁRIO.
             setUsuario({...usuario,[name]:value});
         }
-        //A FUNÇÃO ABAIXO QUE É RESPONSÁVEL POR VALIDAR O LOGIN DO USUÁRIO E RETORNAR UMA MENSSAGEM DE SUCESSO OU ERRO.
+        //A FUNÇÃO ABAIXO QUE É RESPONSÁVEL POR VALIDAR O LOGIN DO USUÁRIO E RETORNAR UMA MENSAGEM DE SUCESSO OU ERRO.
         const handleSubmit = async (e) => {
             e.preventDefault();
 
@@ -44,11 +44,21 @@ export default function LoginUsers() {
 
                     //Verificando se o usuário existe.
                     if(data.status){
+
+                        //Gerar um token para o usuário.
+                        const token = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
+                        
+                        //Armazenar o token no sessionStorage.
+                        sessionStorage.setItem("token-user",token);
+
+                        //Armazenar o obj-usuário no sessionStorage.
+                        sessionStorage.setItem("obj-user",JSON.stringify(data.usuario));
+
                         //REDIRECIONANDO O USUÁRIO PARA A PÁGINA DE HOME.
                         setMsg("Login realizado com sucesso!");
                         setTimeout(() => {
                             setMsg("");
-                            navigate.push("/");
+                           window.location.href = "/";
                         }, 5000);
                         
                     }else{
